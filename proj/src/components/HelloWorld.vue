@@ -4,12 +4,13 @@
     <div class="ojama-field">
     </div>
     <div class="play-field">
-      <table class="play-field-table">
-        <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-      </table>
+      <div v-for="row in state" v-bind:key="row.id">
+        <div v-for="cell in row" v-bind:key="cell.id" v-bind:class="{ red : cell }"></div>
+      </div>
     </div>
   </div>
   <div class="next-field">
+    <button @click="start">start</button>
   </div>
 </div>
 </template>
@@ -19,6 +20,47 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  methods: {
+    start: function () {
+      setInterval(this.mainroop, 3000);
+    },
+    mainroop: function () {
+      let pos = [];
+      this.state.forEach((row, rindex) => {
+        row.forEach((cell, cindex) => {
+          if (cell !== 0 && rindex !== 11) {
+            pos.push([rindex, cindex]);
+          }
+        });
+      });
+
+      pos.forEach((p) => {
+        const row = p[0];
+        const column = p[1];
+        this.state[row][column] = 0;
+        this.state[row + 1][column] = 1;
+      });
+      console.log(this.state);
+    }
+  },
+  data () {
+    return {
+      state: [
+        [1,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0]
+      ]
+    }
   }
 }
 </script>
@@ -53,13 +95,27 @@ a {
 .play-field {
   background-color: lightgrey;
   height: 80%;
+  display: flex;
+  flex-direction: column;
 }
-.play-field-table > tr > td {
-  border: solid 5px black;
-  border-color: black;
-  width: 18%;
-  height: 8.333%;
+
+.play-field > div {
+  display: flex;
+  flex-grow: 1;
 }
+
+.play-field > div > div {
+  flex-grow: 1;
+}
+
+.play-field div {
+  border: solid 1px black;
+}
+
+.red {
+  background-color: chartreuse;
+}
+
 .next-field {
   border: solid 1px black;
   height: 25%;
