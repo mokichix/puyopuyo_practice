@@ -5,7 +5,7 @@
     </div>
     <div class="play-field">
       <div v-for="row in state" v-bind:key="row.id">
-        <div v-for="cell in row" v-bind:key="cell.id" v-bind:class="{ red : cell }"></div>
+        <div v-for="cell in row" v-bind:key="cell.id" v-bind:class="{ red : cell !== 0 }"></div>
       </div>
     </div>
   </div>
@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     start: function () {
-      setInterval(this.mainroop, 3000);
+      setInterval(this.mainroop, 1000);
     },
     mainroop: function () {
       let pos = [];
@@ -38,8 +38,8 @@ export default {
       pos.forEach((p) => {
         const row = p[0];
         const column = p[1];
-        this.state[row][column] = 0;
-        this.state[row + 1][column] = 1;
+        this.$set(this.state[row], column, 0);
+        this.$set(this.state[row + 1], column, 1);
       });
       console.log(this.state);
     }
